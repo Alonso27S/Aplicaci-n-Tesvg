@@ -80,28 +80,39 @@ class _ScannerPageState extends State<ScannerPage>
         await reproducirSonido(
           "NEGADO.mp4",
         );
-      } else if (data["success"] ==
-          false) {
-        await reproducirSonido(
-          "ERROR.mp4",
-        );
 
-        } else if (data["message"]
-          ?.toString()
-          .toLowerCase() ==
-            "credencial no encontrada") {
+      } else if (data["message"]
+                ?.toString()
+                .toLowerCase() ==
+          "credencial vencida") {
 
-          await reproducirSonido(
-          "NEGADO.mp4",
-      );
+          await reproducirSonido("NEGADO.mp4");
+
+
+      } else if (data["message"]
+                ?.toString()
+                .toLowerCase() ==
+          "El usuario excedió el límite de accesos permitidos para el día de hoy") {
+          await reproducirSonido("ERROR.mp4",);
+
+    
+
+      } else if (data["message"]
+                ?.toString()
+                .toLowerCase() ==
+          "credencial no encontrada") {
+
+          await reproducirSonido("NEGADO.mp4",);
+
 
         
       } else if (data["movimiento"]
-              ?.toString() ==
+                 ?.toString() ==
           "ENTRADA") {
         await reproducirSonido(
           "ENTRADA.mp4",
         );
+        
       } else if (data["movimiento"]
               ?.toString() ==
           "SALIDA") {
@@ -234,7 +245,7 @@ class _ScannerPageState extends State<ScannerPage>
             final qr = barcode.rawValue ?? "";
 
             if (qr.isEmpty) return;
-
+ 
             scanned = true;
 
             verificarQR(qr);
@@ -404,7 +415,7 @@ class _ScannerPageState extends State<ScannerPage>
                       MainAxisSize.min,
                   children: [
 
-                    Text(
+                      Text(
                       usuario!["nombreCompleto"]
                               ?.toString() ??
                           "",
@@ -445,33 +456,63 @@ class _ScannerPageState extends State<ScannerPage>
 
                     Text(
                       usuario!["message"]
-                                  ?.toString()
-                                  .toLowerCase() ==
-                              "credencial inactiva"
-                          ? "ACCESO DENEGADO"
-                          : usuario!["success"] ==
-                                  false
-                              ? "LÍMITE DE ACCESOS"
-                              : usuario!["movimiento"]
-                                          .toString() ==
-                                      "ENTRADA"
-                                  ? "ACCESO PERMITIDO"
-                                  : "SALIDA REGISTRADA",
+            ?.toString()
+            .toLowerCase() ==
+        "credencial inactiva"
+    ? "ACCESO DENEGADO"
+
+
+    :usuario!["message"]
+        ?.toString()
+        .toLowerCase() ==
+    "credencial vencida"
+? "CREDENCIAL VENCIDA"
+
+    : usuario!["message"]
+                ?.toString()
+                .toLowerCase() ==
+            "credencial no encontrada"
+        ? "USUARIO NO REGISTRADO"
+
+
+        : usuario!["success"] == false
+            ? "LÍMITE DE ACCESOS"
+
+            : usuario!["movimiento"]
+                        .toString() ==
+                    "ENTRADA"
+                ? "ACCESO PERMITIDO"
+
+                : "SALIDA REGISTRADA",
                       style: TextStyle(
                         color:
-                            usuario!["message"]
-                                        ?.toString()
-                                        .toLowerCase() ==
-                                    "credencial inactiva"
-                                ? Colors.redAccent
-                                : usuario!["success"] ==
-                                        false
-                                    ? Colors.redAccent
-                                    : usuario!["movimiento"]
-                                                .toString() ==
-                                            "ENTRADA"
-                                        ? Colors.greenAccent
-                                        : Colors.orangeAccent,
+    usuario!["message"]
+                ?.toString()
+                .toLowerCase() ==
+            "credencial inactiva"
+        ? Colors.redAccent
+
+        :usuario!["message"]
+        ?.toString()
+        .toLowerCase() ==
+    "credencial vencida"
+? Colors.redAccent
+
+        : usuario!["message"]
+                    ?.toString()
+                    .toLowerCase() ==
+                "credencial no encontrada"
+            ? Colors.redAccent
+
+            : usuario!["success"] == false
+                ? Colors.redAccent
+
+                : usuario!["movimiento"]
+                            .toString() ==
+                        "ENTRADA"
+                    ? Colors.greenAccent
+
+                    : Colors.orangeAccent,
                         fontSize: 20,
                         fontWeight:
                             FontWeight.bold,
