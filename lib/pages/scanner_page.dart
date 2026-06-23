@@ -89,11 +89,13 @@ class _ScannerPageState extends State<ScannerPage>
           await reproducirSonido("NEGADO.mp4");
 
 
-      } else if (data["message"]
-                ?.toString()
-                .toLowerCase() ==
-          "El usuario excedió el límite de accesos permitidos para el día de hoy") {
-          await reproducirSonido("ERROR.mp4",);
+      } else if (data["success"] == false && data["message"]
+            ?.toString()
+            .toLowerCase()
+            .contains("límite de accesos") == true) {
+
+          await reproducirSonido("ERROR.mp4");
+
 
     
 
@@ -112,7 +114,7 @@ class _ScannerPageState extends State<ScannerPage>
         await reproducirSonido(
           "ENTRADA.mp4",
         );
-        
+
       } else if (data["movimiento"]
               ?.toString() ==
           "SALIDA") {
